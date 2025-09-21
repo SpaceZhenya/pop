@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Offline AI Story Generator</title>
+  <title>Offline AI-Like Story Generator</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
     input, select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-  <h1>Offline AI Story Generator</h1>
+  <h1>Offline “AI-Like” Story Generator</h1>
 
   <label>Genre:</label>
   <select id="genre">
@@ -21,42 +21,79 @@
   </select>
 
   <label>Main character name:</label>
-  <input type="text" id="character" placeholder="Luna the cat">
+  <input type="text" id="character" placeholder="e.g., Luna the cat">
 
   <label>Story prompt:</label>
   <input type="text" id="prompt" placeholder="An epic adventure begins">
 
   <button id="generateBtn">Generate Story</button>
+  <button id="copyBtn">Copy Story</button>
 
-  <div id="story">Loading model, please wait...</div>
+  <div id="story"></div>
 
-  <script type="module">
-    import { GPT4All } from './gpt4all.js';
+  <script>
+    const storyChunks = {
+      fantasy: [
+        "awoke in a shimmering forest where magic floated in the air.",
+        "found a glowing crystal that pulsed with energy.",
+        "met a wise dragon who revealed secrets of the ancient world.",
+        "journeyed through mountains and valleys filled with enchanted creatures.",
+        "discovered powers within themselves they never knew existed.",
+        "returned home, forever changed by the adventures they'd experienced."
+      ],
+      adventure: [
+        "set sail across stormy seas in search of hidden treasure.",
+        "found a mysterious map leading to a secret island.",
+        "braved jungles filled with wild animals and ancient ruins.",
+        "solved riddles left by explorers long ago.",
+        "formed alliances with courageous companions.",
+        "emerged victorious, bringing back tales of glory."
+      ],
+      mystery: [
+        "walked through foggy streets with a cryptic letter in hand.",
+        "found hidden clues in abandoned buildings and dusty libraries.",
+        "decoded secret messages that led to shocking revelations.",
+        "uncovered a plot that had remained hidden for decades.",
+        "restored truth and justice to the town.",
+        "became a hero known for their cleverness and courage."
+      ]
+    };
 
-    const storyDiv = document.getElementById('story');
-    storyDiv.textContent = "Loading offline AI model...";
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
 
-    // 1️⃣ Load pre-trained model offline (place model file in same folder)
-    const model = await GPT4All.loadModel('./ggml-model-gpt4all-mini.bin');
-
-    storyDiv.textContent = "Model loaded. Enter a prompt to generate a story.";
-
-    document.getElementById('generateBtn').addEventListener('click', async () => {
+    function generateStory() {
       const genre = document.getElementById('genre').value;
       const character = document.getElementById('character').value || "The hero";
-      const promptInput = document.getElementById('prompt').value || "An epic adventure begins";
+      const prompt = document.getElementById('prompt').value || "";
 
-      const promptText = `Write a long, ${genre} story about ${character}. ${promptInput}`;
+      const chunks = [...storyChunks[genre]];
+      shuffleArray(chunks);
 
-      storyDiv.textContent = "Generating story...";
+      // Repeat chunks to make story longer
+      let storyText = "";
+      for (let i = 0; i < 5; i++) {
+        chunks.forEach(chunk => {
+          storyText += `${character} ${chunk} `;
+        });
+      }
 
-      // 2️⃣ Generate story offline
-      const story = await model.generate(promptText, {
-        max_tokens: 2000,      // controls story length
-        temperature: 0.7        // creativity level
-      });
+      // Add user prompt at the beginning
+      storyText = `${prompt} ${storyText}`;
 
-      storyDiv.textContent = story;
+      document.getElementById('story').textContent = storyText;
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', generateStory);
+
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const text = document.getElementById('story').textContent;
+      navigator.clipboard.writeText(text);
+      alert("Story copied to clipboard!");
     });
   </script>
 </body>
