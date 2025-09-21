@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Offline Story Generator</title>
+  <title>Offline Long Story Generator</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; background: #f9f9f9; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; background: #f9f9f9; }
     h1 { text-align: center; }
-    select, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
-    #story { margin-top: 20px; white-space: pre-wrap; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 5px; }
+    select, input, button { width: 100%; margin-top: 10px; padding: 12px; font-size: 16px; }
+    #story { margin-top: 20px; white-space: pre-wrap; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 600px; overflow-y: auto; }
+    button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 6px; }
     button:hover { background-color: #45a049; }
   </style>
 </head>
 <body>
-  <h1>Offline Story Generator</h1>
+  <h1>Offline Long Story Generator</h1>
 
   <label for="genre">Pick a genre:</label>
   <select id="genre">
@@ -21,7 +21,7 @@
     <option value="mystery">Mystery</option>
   </select>
 
-  <label for="character">Enter main character name (optional):</label>
+  <label for="character">Enter main character name:</label>
   <input type="text" id="character" placeholder="e.g., Luna the cat">
 
   <button onclick="generateStory()">Generate Story</button>
@@ -29,36 +29,62 @@
   <div id="story"></div>
 
   <script>
-    // Pre-generated high-quality stories (offline-ready)
+    // Pre-generated long stories (example snippets; in practice, fill with full 10+ paragraph stories)
     const stories = {
       fantasy: [
-`Luna the cat had always dreamed of exploring the Enchanted Forest. One morning, she found a glowing crystal beneath the roots of an ancient tree. The crystal hummed softly, filling her with courage and curiosity.
+`{character} awoke in the forest of Eldoria, sunlight shimmering through ancient trees. Birds sang melodies she had never heard, and a faint magical hum filled the air. She stepped cautiously, feeling that something extraordinary awaited.
 
-As Luna ventured deeper, she met a wise old owl who warned her of the dragon that guarded the heart of the forest. Undeterred, Luna followed the sparkling trail left by the crystal, navigating twisting paths and shimmering waterfalls.
+As she walked, {character} encountered a small clearing where a glowing crystal sat atop a moss-covered stone. The crystal pulsed softly, and she felt courage coursing through her.
 
-Finally, Luna reached the dragon’s lair. Instead of a ferocious beast, she discovered a gentle creature who had been lonely for centuries. Together, they unlocked the magic of the forest, and Luna returned home with a heart full of wonder and stories to tell.`,
+Further along, twisting paths led her to an abandoned tower. Inside, {character} discovered scrolls containing powerful spells. Reading them, she felt the forest around her respond magically, as though alive.
 
-`The young wizard Orion had always felt out of place in the kingdom of Eldoria. One day, he stumbled upon a hidden library filled with ancient spells. As he read, the walls shimmered and transported him into a world of dragons and sorcery.
+Night fell, and glowing fireflies danced around her. A gentle owl appeared, guiding her to a hidden waterfall with shimmering waters. Beneath the falls lay a secret passage.
 
-Through trials and enchantments, Orion learned the true meaning of bravery. With a magical sword gifted by a mystical fox, he defeated the looming shadow threatening the kingdom. By the end of his quest, he had not only saved Eldoria but also discovered his own courage and destiny.`
+Through the passage, she found a serene valley filled with creatures thought extinct. {character} realized she was part of a story much larger than herself.
+
+Days passed as she explored the valley, making friends with mystical beings and learning ancient knowledge. Challenges arose, testing her wisdom, courage, and kindness.
+
+Eventually, {character} faced a dragon guarding the heart of the valley. The dragon was wise, not fearsome, and welcomed her as a friend.
+
+With the dragon’s guidance, she unlocked secrets of the enchanted forest, discovering powers she never knew she had.
+
+By the journey’s end, {character} returned home transformed, carrying not only stories to tell but also a deeper understanding of magic, friendship, and destiny.
+
+Every corner of Eldoria now felt alive to her, as if the forest itself whispered her name and celebrated her adventures.`
       ],
       adventure: [
-`Captain Finn embarked on a perilous sea voyage. Storms tossed his ship violently, but he kept his crew focused on the treasure map that promised untold riches. Each day brought new challenges: hidden reefs, rival pirates, and mysterious islands.
+`{character} embarked on a sea voyage, where stormy skies threatened at every turn. Waves crashed against the ship, testing the crew’s resolve. Each morning brought new discoveries and hidden dangers.
 
-On one foggy morning, Finn discovered a hidden lagoon where the water glowed under the rising sun. In its center lay an ancient chest. Opening it revealed not gold, but a collection of priceless artifacts from forgotten civilizations. Finn realized that the journey itself, full of danger and wonder, was the true treasure.`,
+In a distant island cove, {character} found a mysterious chest buried in sand. Opening it revealed maps and artifacts from forgotten civilizations. The treasures hinted at secrets that spanned centuries.
 
-`Aria trekked across the scorching desert, following the clues of an ancient map. She encountered sandstorms, mirages, and hidden oases. Each obstacle tested her resolve and sharpened her instincts.
+Through jungles and mountains, {character} faced wild animals, treacherous paths, and puzzling riddles. The journey demanded courage and ingenuity beyond anything previously imagined.
 
-At last, she reached a cavern marked with mysterious symbols. Inside, relics of a lost kingdom lay untouched for centuries. Aria knew her adventure had changed her forever, and she vowed to share these stories with the world.`
+Along the way, {character} met allies and foes alike. Each encounter shaped the adventure, testing loyalty, bravery, and resourcefulness.
+
+Nights were spent under the stars, recounting the tales of the day. Every challenge strengthened {character}’s resolve, preparing for even greater trials ahead.
+
+Eventually, {character} discovered the hidden city described in the ancient maps. Its gates, adorned with intricate carvings, revealed secrets long buried.
+
+Inside, ancient knowledge and mystical artifacts awaited. {character} realized that the journey had been as important as the treasure itself.
+
+By the voyage’s end, {character} had grown in wisdom, courage, and perspective, forever changed by the journey across seas, forests, and mountains.
+
+Returning home, stories of the adventure spread across towns and villages, inspiring generations to explore and dream.`
       ],
       mystery: [
-`Detective Morgan walked through the foggy streets of Ravenwood, holding a cryptic letter that hinted at secrets buried for decades. Every clue led her closer to a puzzle she couldn't yet understand.
+`Detective {character} walked through the foggy streets of Ravenwood, holding a cryptic letter that hinted at secrets buried for decades. Each clue brought her deeper into a labyrinth of mysteries.
 
-Through hidden passages and forgotten basements, Morgan discovered a series of journals revealing the town’s dark history. The final entry unveiled a shocking truth: the town’s founder had hidden a treasure and a scandal that could rewrite the town’s legacy. With careful planning, Morgan exposed the mystery and brought closure to generations.`,
+Hidden passages, forgotten basements, and dusty libraries revealed the town’s concealed past. Every discovery was more puzzling than the last, testing {character}’s insight and patience.
 
-`Late at night, Alex noticed a shadow slipping across the walls of the old manor. Following it cautiously, Alex found a hidden key embedded in the library’s ancient shelves. The key opened a secret chamber filled with old letters and artifacts.
+Along the way, {character} encountered coded messages, strange symbols, and hints of betrayal. Each puzzle solved revealed a fragment of a larger, sinister plot.
 
-Piecing together the clues, Alex uncovered a conspiracy that had remained hidden for decades. By morning, the mystery was solved, and the manor’s secrets were finally revealed to the town, restoring both truth and justice.`
+In a hidden chamber, {character} uncovered evidence that connected generations, showing that the town’s history was far more complex than anyone imagined.
+
+Careful deduction led to a shocking revelation: the town’s founder had hidden a treasure alongside a scandal capable of rewriting local history.
+
+By piecing together the clues, {character} not only solved the decades-long mystery but restored truth and justice to Ravenwood.
+
+The adventure left {character} wiser, respected, and with stories that would be passed down for years, inspiring future detectives and adventurers alike.`
       ]
     };
 
@@ -68,14 +94,10 @@ Piecing together the clues, Alex uncovered a conspiracy that had remained hidden
 
     function generateStory() {
       const genre = document.getElementById('genre').value;
-      let character = document.getElementById('character').value;
-      if (!character) character = "The hero"; // default name
+      let character = document.getElementById('character').value || "The hero";
       const storyDiv = document.getElementById('story');
 
-      // Pick a random story from the pre-generated pool
       let story = randomElement(stories[genre]);
-
-      // Replace placeholder with user character name
       story = story.replace(/{character}/g, character);
 
       storyDiv.textContent = story;
