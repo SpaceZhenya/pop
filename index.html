@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Offline AI-Like Story Generator</title>
+  <title>Offline Long Story Generator</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
     input, select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
-    #story { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto; }
+    #story { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 20px; border-radius: 10px; max-height: 700px; overflow-y: auto; }
     button { background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
     button:hover { background: #45a049; }
   </style>
 </head>
 <body>
-  <h1>Offline “AI-Like” Story Generator</h1>
+  <h1>Offline Long Story Generator</h1>
 
   <label>Genre:</label>
   <select id="genre">
@@ -23,8 +23,11 @@
   <label>Main character name:</label>
   <input type="text" id="character" placeholder="e.g., Luna the cat">
 
+  <label>Additional characters (optional):</label>
+  <input type="text" id="sideCharacters" placeholder="e.g., Merlin, Trixie">
+
   <label>Story prompt:</label>
-  <input type="text" id="prompt" placeholder="An epic adventure begins">
+  <input type="text" id="prompt" placeholder="The adventure begins">
 
   <button id="generateBtn">Generate Story</button>
   <button id="copyBtn">Copy Story</button>
@@ -39,7 +42,11 @@
         "met a wise dragon who revealed secrets of the ancient world.",
         "journeyed through mountains and valleys filled with enchanted creatures.",
         "discovered powers within themselves they never knew existed.",
-        "returned home, forever changed by the adventures they'd experienced."
+        "returned home, forever changed by the adventures they'd experienced.",
+        "faced a dark sorcerer who threatened the entire kingdom.",
+        "learned the ancient spells of a hidden library.",
+        "befriended magical creatures who guided them through danger.",
+        "solved riddles to unlock a secret portal to another realm."
       ],
       adventure: [
         "set sail across stormy seas in search of hidden treasure.",
@@ -47,7 +54,11 @@
         "braved jungles filled with wild animals and ancient ruins.",
         "solved riddles left by explorers long ago.",
         "formed alliances with courageous companions.",
-        "emerged victorious, bringing back tales of glory."
+        "emerged victorious, bringing back tales of glory.",
+        "navigated treacherous mountains during a fierce storm.",
+        "discovered ancient artifacts that held untold powers.",
+        "fought rival adventurers who tried to steal their treasures.",
+        "rescued a companion trapped in a dangerous temple."
       ],
       mystery: [
         "walked through foggy streets with a cryptic letter in hand.",
@@ -55,7 +66,11 @@
         "decoded secret messages that led to shocking revelations.",
         "uncovered a plot that had remained hidden for decades.",
         "restored truth and justice to the town.",
-        "became a hero known for their cleverness and courage."
+        "became a hero known for their cleverness and courage.",
+        "followed a trail of footprints that vanished mysteriously.",
+        "interviewed suspicious witnesses who told half-truths.",
+        "discovered a secret passage beneath the old mansion.",
+        "solved a complex puzzle that revealed the criminal mastermind."
       ]
     };
 
@@ -69,27 +84,25 @@
     function generateStory() {
       const genre = document.getElementById('genre').value;
       const character = document.getElementById('character').value || "The hero";
+      const sideChars = document.getElementById('sideCharacters').value;
       const prompt = document.getElementById('prompt').value || "";
 
+      const sideCharactersText = sideChars ? ` Side characters include: ${sideChars}.` : "";
       const chunks = [...storyChunks[genre]];
       shuffleArray(chunks);
 
-      // Repeat chunks to make story longer
-      let storyText = "";
-      for (let i = 0; i < 5; i++) {
+      // Make the story longer by repeating the shuffled chunks multiple times
+      let storyText = `${prompt} ${sideCharactersText} `;
+      for (let repeat = 0; repeat < 6; repeat++) {  // Repeat 6 times for longer story
         chunks.forEach(chunk => {
           storyText += `${character} ${chunk} `;
         });
       }
 
-      // Add user prompt at the beginning
-      storyText = `${prompt} ${storyText}`;
-
       document.getElementById('story').textContent = storyText;
     }
 
     document.getElementById('generateBtn').addEventListener('click', generateStory);
-
     document.getElementById('copyBtn').addEventListener('click', () => {
       const text = document.getElementById('story').textContent;
       navigator.clipboard.writeText(text);
