@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Offline Multi-Paragraph Story Generator</title>
+  <title>Offline Story Generator</title>
   <style>
     body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; background: #f9f9f9; }
     h1 { text-align: center; }
@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <h1>Offline Multi-Paragraph Story Generator</h1>
+  <h1>Offline Story Generator</h1>
 
   <label for="genre">Pick a genre:</label>
   <select id="genre">
@@ -29,49 +29,37 @@
   <div id="story"></div>
 
   <script>
-    const storySegments = {
-      fantasy: {
-        beginnings: [
-          "{character} awoke in a kingdom of soaring towers and magical forests, not knowing what adventure awaited them.",
-          "In a land filled with dragons and enchanted creatures, {character} stumbled upon a hidden pathway beneath the ancient trees."
-        ],
-        middles: [
-          "Along the journey, {character} discovered a glowing crystal that shimmered with strange magic.",
-          "Facing countless challenges, {character} used courage and wit to overcome enchanted obstacles."
-        ],
-        endings: [
-          "In the end, {character} returned home, wiser and ready for the next adventure.",
-          "Finally, {character} uncovered a secret that would change the fate of the entire kingdom."
-        ]
-      },
-      adventure: {
-        beginnings: [
-          "{character} set out on a daring sea voyage under stormy skies.",
-          "Through dense jungles and rugged mountains, {character} followed an ancient map."
-        ],
-        middles: [
-          "They faced hidden traps, wild animals, and mysterious phenomena along the way.",
-          "Unexpected allies joined {character}, helping them overcome the toughest challenges."
-        ],
-        endings: [
-          "After days of travel, {character} discovered a treasure beyond imagination.",
-          "Finally, the journey ended with {character} reflecting on all the lessons learned."
-        ]
-      },
-      mystery: {
-        beginnings: [
-          "In a foggy town, {character} found a cryptic letter hinting at a decades-old secret.",
-          "Late at night, {character} noticed shadows moving across the old library walls."
-        ],
-        middles: [
-          "{character} followed clues that led deeper into hidden passages.",
-          "With each discovery, the mystery became more puzzling and dangerous."
-        ],
-        endings: [
-          "Finally, {character} uncovered a truth no one expected, solving the mystery.",
-          "In the end, {character}'s courage and insight revealed secrets that had been long forgotten."
-        ]
-      }
+    // Pre-generated high-quality stories (offline-ready)
+    const stories = {
+      fantasy: [
+`Luna the cat had always dreamed of exploring the Enchanted Forest. One morning, she found a glowing crystal beneath the roots of an ancient tree. The crystal hummed softly, filling her with courage and curiosity.
+
+As Luna ventured deeper, she met a wise old owl who warned her of the dragon that guarded the heart of the forest. Undeterred, Luna followed the sparkling trail left by the crystal, navigating twisting paths and shimmering waterfalls.
+
+Finally, Luna reached the dragon’s lair. Instead of a ferocious beast, she discovered a gentle creature who had been lonely for centuries. Together, they unlocked the magic of the forest, and Luna returned home with a heart full of wonder and stories to tell.`,
+
+`The young wizard Orion had always felt out of place in the kingdom of Eldoria. One day, he stumbled upon a hidden library filled with ancient spells. As he read, the walls shimmered and transported him into a world of dragons and sorcery.
+
+Through trials and enchantments, Orion learned the true meaning of bravery. With a magical sword gifted by a mystical fox, he defeated the looming shadow threatening the kingdom. By the end of his quest, he had not only saved Eldoria but also discovered his own courage and destiny.`
+      ],
+      adventure: [
+`Captain Finn embarked on a perilous sea voyage. Storms tossed his ship violently, but he kept his crew focused on the treasure map that promised untold riches. Each day brought new challenges: hidden reefs, rival pirates, and mysterious islands.
+
+On one foggy morning, Finn discovered a hidden lagoon where the water glowed under the rising sun. In its center lay an ancient chest. Opening it revealed not gold, but a collection of priceless artifacts from forgotten civilizations. Finn realized that the journey itself, full of danger and wonder, was the true treasure.`,
+
+`Aria trekked across the scorching desert, following the clues of an ancient map. She encountered sandstorms, mirages, and hidden oases. Each obstacle tested her resolve and sharpened her instincts.
+
+At last, she reached a cavern marked with mysterious symbols. Inside, relics of a lost kingdom lay untouched for centuries. Aria knew her adventure had changed her forever, and she vowed to share these stories with the world.`
+      ],
+      mystery: [
+`Detective Morgan walked through the foggy streets of Ravenwood, holding a cryptic letter that hinted at secrets buried for decades. Every clue led her closer to a puzzle she couldn't yet understand.
+
+Through hidden passages and forgotten basements, Morgan discovered a series of journals revealing the town’s dark history. The final entry unveiled a shocking truth: the town’s founder had hidden a treasure and a scandal that could rewrite the town’s legacy. With careful planning, Morgan exposed the mystery and brought closure to generations.`,
+
+`Late at night, Alex noticed a shadow slipping across the walls of the old manor. Following it cautiously, Alex found a hidden key embedded in the library’s ancient shelves. The key opened a secret chamber filled with old letters and artifacts.
+
+Piecing together the clues, Alex uncovered a conspiracy that had remained hidden for decades. By morning, the mystery was solved, and the manor’s secrets were finally revealed to the town, restoring both truth and justice.`
+      ]
     };
 
     function randomElement(arr) {
@@ -80,16 +68,15 @@
 
     function generateStory() {
       const genre = document.getElementById('genre').value;
-      let character = document.getElementById('character').value || "The hero";
-      const segments = storySegments[genre];
+      let character = document.getElementById('character').value;
+      if (!character) character = "The hero"; // default name
       const storyDiv = document.getElementById('story');
 
-      const story = [
-        randomElement(segments.beginnings),
-        randomElement(segments.middles),
-        randomElement(segments.endings)
-      ].map(paragraph => paragraph.replace(/{character}/g, character))
-       .join("\n\n");
+      // Pick a random story from the pre-generated pool
+      let story = randomElement(stories[genre]);
+
+      // Replace placeholder with user character name
+      story = story.replace(/{character}/g, character);
 
       storyDiv.textContent = story;
     }
