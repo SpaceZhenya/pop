@@ -1,107 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Offline Long Story Generator</title>
+  <title>Offline AI Story Generator</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; background: #f9f9f9; }
-    h1 { text-align: center; }
-    select, input, button { width: 100%; margin-top: 10px; padding: 12px; font-size: 16px; }
-    #story { margin-top: 20px; white-space: pre-wrap; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 600px; overflow-y: auto; }
-    button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 6px; }
+    body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+    input, select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
+    #story { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto; }
+    button { background-color: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
     button:hover { background-color: #45a049; }
   </style>
 </head>
 <body>
-  <h1>Offline Long Story Generator</h1>
+  <h1>Offline AI Story Generator</h1>
 
-  <label for="genre">Pick a genre:</label>
+  <label for="genre">Choose a genre:</label>
   <select id="genre">
     <option value="fantasy">Fantasy</option>
     <option value="adventure">Adventure</option>
     <option value="mystery">Mystery</option>
   </select>
 
-  <label for="character">Enter main character name:</label>
+  <label for="character">Main character name:</label>
   <input type="text" id="character" placeholder="e.g., Luna the cat">
 
-  <button onclick="generateStory()">Generate Story</button>
+  <label for="prompt">Story prompt:</label>
+  <input type="text" id="prompt" placeholder="A brave cat discovers a hidden forest">
+
+  <button id="generateBtn">Generate Story</button>
 
   <div id="story"></div>
 
-  <script>
-    // Pre-generated long stories (example snippets; in practice, fill with full 10+ paragraph stories)
-    const stories = {
-      fantasy: [
-`{character} awoke in the forest of Eldoria, sunlight shimmering through ancient trees. Birds sang melodies she had never heard, and a faint magical hum filled the air. She stepped cautiously, feeling that something extraordinary awaited.
+  <script type="module">
+    import { Llama } from './llama-wasm.js';
 
-As she walked, {character} encountered a small clearing where a glowing crystal sat atop a moss-covered stone. The crystal pulsed softly, and she felt courage coursing through her.
+    // Load the offline AI model
+    const model = await Llama.loadModel('ggml-model-q4_0.bin');
 
-Further along, twisting paths led her to an abandoned tower. Inside, {character} discovered scrolls containing powerful spells. Reading them, she felt the forest around her respond magically, as though alive.
-
-Night fell, and glowing fireflies danced around her. A gentle owl appeared, guiding her to a hidden waterfall with shimmering waters. Beneath the falls lay a secret passage.
-
-Through the passage, she found a serene valley filled with creatures thought extinct. {character} realized she was part of a story much larger than herself.
-
-Days passed as she explored the valley, making friends with mystical beings and learning ancient knowledge. Challenges arose, testing her wisdom, courage, and kindness.
-
-Eventually, {character} faced a dragon guarding the heart of the valley. The dragon was wise, not fearsome, and welcomed her as a friend.
-
-With the dragon’s guidance, she unlocked secrets of the enchanted forest, discovering powers she never knew she had.
-
-By the journey’s end, {character} returned home transformed, carrying not only stories to tell but also a deeper understanding of magic, friendship, and destiny.
-
-Every corner of Eldoria now felt alive to her, as if the forest itself whispered her name and celebrated her adventures.`
-      ],
-      adventure: [
-`{character} embarked on a sea voyage, where stormy skies threatened at every turn. Waves crashed against the ship, testing the crew’s resolve. Each morning brought new discoveries and hidden dangers.
-
-In a distant island cove, {character} found a mysterious chest buried in sand. Opening it revealed maps and artifacts from forgotten civilizations. The treasures hinted at secrets that spanned centuries.
-
-Through jungles and mountains, {character} faced wild animals, treacherous paths, and puzzling riddles. The journey demanded courage and ingenuity beyond anything previously imagined.
-
-Along the way, {character} met allies and foes alike. Each encounter shaped the adventure, testing loyalty, bravery, and resourcefulness.
-
-Nights were spent under the stars, recounting the tales of the day. Every challenge strengthened {character}’s resolve, preparing for even greater trials ahead.
-
-Eventually, {character} discovered the hidden city described in the ancient maps. Its gates, adorned with intricate carvings, revealed secrets long buried.
-
-Inside, ancient knowledge and mystical artifacts awaited. {character} realized that the journey had been as important as the treasure itself.
-
-By the voyage’s end, {character} had grown in wisdom, courage, and perspective, forever changed by the journey across seas, forests, and mountains.
-
-Returning home, stories of the adventure spread across towns and villages, inspiring generations to explore and dream.`
-      ],
-      mystery: [
-`Detective {character} walked through the foggy streets of Ravenwood, holding a cryptic letter that hinted at secrets buried for decades. Each clue brought her deeper into a labyrinth of mysteries.
-
-Hidden passages, forgotten basements, and dusty libraries revealed the town’s concealed past. Every discovery was more puzzling than the last, testing {character}’s insight and patience.
-
-Along the way, {character} encountered coded messages, strange symbols, and hints of betrayal. Each puzzle solved revealed a fragment of a larger, sinister plot.
-
-In a hidden chamber, {character} uncovered evidence that connected generations, showing that the town’s history was far more complex than anyone imagined.
-
-Careful deduction led to a shocking revelation: the town’s founder had hidden a treasure alongside a scandal capable of rewriting local history.
-
-By piecing together the clues, {character} not only solved the decades-long mystery but restored truth and justice to Ravenwood.
-
-The adventure left {character} wiser, respected, and with stories that would be passed down for years, inspiring future detectives and adventurers alike.`
-      ]
-    };
-
-    function randomElement(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    function generateStory() {
+    document.getElementById('generateBtn').addEventListener('click', async () => {
       const genre = document.getElementById('genre').value;
-      let character = document.getElementById('character').value || "The hero";
-      const storyDiv = document.getElementById('story');
+      const character = document.getElementById('character').value || "The hero";
+      const promptInput = document.getElementById('prompt').value || "An epic adventure begins";
 
-      let story = randomElement(stories[genre]);
-      story = story.replace(/{character}/g, character);
+      // Create a dynamic prompt for the AI
+      const promptText = `Write a long, ${genre} story about ${character}. ${promptInput}`;
 
-      storyDiv.textContent = story;
-    }
+      // Generate story offline
+      const story = await model.generate(promptText, {
+        max_tokens: 2500,   // adjust for very long stories
+        temperature: 0.7
+      });
+
+      document.getElementById('story').textContent = story;
+    });
   </script>
 </body>
 </html>
