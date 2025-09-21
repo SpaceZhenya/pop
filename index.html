@@ -5,7 +5,7 @@
   <style>
     body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
     input, select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
-    #story { margin-top: 20px; white-space: pre-wrap; padding: 20px; border-radius: 10px; background: #f9f9f9; max-height: 600px; overflow-y: auto; }
+    #story { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto; }
     button { background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
     button:hover { background: #45a049; }
   </style>
@@ -28,29 +28,35 @@
 
   <button id="generateBtn">Generate Story</button>
 
-  <div id="story"></div>
+  <div id="story">Loading model, please wait...</div>
 
   <script type="module">
-    import { Llama } from './llama-wasm.js';
+    import { GPT4All } from './gpt4all.js';
 
-    // 1. Load the offline AI model
-    const model = await Llama.loadModel('ggml-model-q4_0.bin');
+    const storyDiv = document.getElementById('story');
+    storyDiv.textContent = "Loading offline AI model...";
+
+    // 1️⃣ Load pre-trained model offline (place model file in same folder)
+    const model = await GPT4All.loadModel('./ggml-model-gpt4all-mini.bin');
+
+    storyDiv.textContent = "Model loaded. Enter a prompt to generate a story.";
 
     document.getElementById('generateBtn').addEventListener('click', async () => {
       const genre = document.getElementById('genre').value;
       const character = document.getElementById('character').value || "The hero";
-      const promptInput = document.getElementById('prompt').value || "An adventure begins";
+      const promptInput = document.getElementById('prompt').value || "An epic adventure begins";
 
-      // 2. Build a dynamic story prompt
       const promptText = `Write a long, ${genre} story about ${character}. ${promptInput}`;
 
-      // 3. Generate story offline
+      storyDiv.textContent = "Generating story...";
+
+      // 2️⃣ Generate story offline
       const story = await model.generate(promptText, {
-        max_tokens: 2500, // controls story length
-        temperature: 0.7
+        max_tokens: 2000,      // controls story length
+        temperature: 0.7        // creativity level
       });
 
-      document.getElementById('story').textContent = story;
+      storyDiv.textContent = story;
     });
   </script>
 </body>
