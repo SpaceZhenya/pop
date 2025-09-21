@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Offline Short Story Generator</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; background: #f9f9f9; }
+    h1 { text-align: center; }
+    select, textarea, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
+    #story { margin-top: 20px; white-space: pre-wrap; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 5px; }
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+  <h1>Offline Short Story Generator</h1>
+
+  <label for="genre">Pick a genre:</label>
+  <select id="genre">
+    <option value="fantasy">Fantasy</option>
+    <option value="adventure">Adventure</option>
+    <option value="mystery">Mystery</option>
+  </select>
+
+  <label for="prompt">Enter a story prompt (optional):</label>
+  <textarea id="prompt" placeholder="e.g., A brave cat discovers a hidden forest"></textarea>
+
+  <button onclick="generateStory()">Generate Story</button>
+
+  <div id="story"></div>
+
+  <script>
+    // High-quality pre-generated story templates (offline-ready)
+    const storyTemplates = {
+      fantasy: [
+        "Once upon a time, in a kingdom of magic and dragons, {character} discovered {item}. Their adventure took a surprising turn when they {plotTwist}. In the end, {prompt}.",
+        "In a land of enchanted forests, {character} embarked on a quest. Along the way, they found {item} and unexpectedly {plotTwist}. {prompt}.",
+        "Deep in the mystical mountains, {character} stumbled upon {item}. With courage, they {plotTwist}. {prompt}."
+      ],
+      adventure: [
+        "On a daring journey across the high seas, {character} carried {item}. They faced many challenges, including {plotTwist}. {prompt}.",
+        "Through dense jungles and treacherous mountains, {character} traveled with {item}. Along the way, they {plotTwist}. {prompt}.",
+        "In search of hidden treasure, {character} used {item}. Suddenly, they {plotTwist}. {prompt}."
+      ],
+      mystery: [
+        "In a quiet, foggy town, {character} discovered {item}. Soon, they {plotTwist}. {prompt}.",
+        "Late at night, {character} investigated a strange occurrence involving {item}. Unexpectedly, they {plotTwist}. {prompt}.",
+        "While searching for clues, {character} found {item} that led them to {plotTwist}. {prompt}."
+      ]
+    };
+
+    // Characters, items, and plot twists for variety
+    const characters = ["a brave knight", "a clever cat", "a young wizard", "an adventurous fox", "a mysterious stranger"];
+    const items = ["a magical sword", "a glowing crystal", "an ancient map", "a talking book", "a golden key"];
+    const plotTwists = ["found a hidden treasure", "was betrayed by a friend", "discovered a secret passage", "met a mystical creature", "uncovered an ancient curse"];
+
+    function randomElement(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateStory() {
+      const genre = document.getElementById('genre').value;
+      const promptText = document.getElementById('prompt').value || "everything turned out happily in the end";
+      const storyDiv = document.getElementById('story');
+
+      // Pick a random high-quality template
+      const template = randomElement(storyTemplates[genre]);
+
+      // Replace placeholders with random elements
+      const story = template
+        .replace("{character}", randomElement(characters))
+        .replace("{item}", randomElement(items))
+        .replace("{plotTwist}", randomElement(plotTwists))
+        .replace("{prompt}", promptText);
+
+      storyDiv.textContent = story;
+    }
+  </script>
+</body>
+</html>
