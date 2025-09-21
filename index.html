@@ -3,28 +3,28 @@
 <head>
   <title>Offline AI Story Generator</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
     input, select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
-    #story { margin-top: 20px; white-space: pre-wrap; background: #f9f9f9; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto; }
-    button { background-color: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
-    button:hover { background-color: #45a049; }
+    #story { margin-top: 20px; white-space: pre-wrap; padding: 20px; border-radius: 10px; background: #f9f9f9; max-height: 600px; overflow-y: auto; }
+    button { background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #45a049; }
   </style>
 </head>
 <body>
   <h1>Offline AI Story Generator</h1>
 
-  <label for="genre">Choose a genre:</label>
+  <label>Genre:</label>
   <select id="genre">
     <option value="fantasy">Fantasy</option>
     <option value="adventure">Adventure</option>
     <option value="mystery">Mystery</option>
   </select>
 
-  <label for="character">Main character name:</label>
-  <input type="text" id="character" placeholder="e.g., Luna the cat">
+  <label>Main character name:</label>
+  <input type="text" id="character" placeholder="Luna the cat">
 
-  <label for="prompt">Story prompt:</label>
-  <input type="text" id="prompt" placeholder="A brave cat discovers a hidden forest">
+  <label>Story prompt:</label>
+  <input type="text" id="prompt" placeholder="An epic adventure begins">
 
   <button id="generateBtn">Generate Story</button>
 
@@ -33,20 +33,20 @@
   <script type="module">
     import { Llama } from './llama-wasm.js';
 
-    // Load the offline AI model
+    // 1. Load the offline AI model
     const model = await Llama.loadModel('ggml-model-q4_0.bin');
 
     document.getElementById('generateBtn').addEventListener('click', async () => {
       const genre = document.getElementById('genre').value;
       const character = document.getElementById('character').value || "The hero";
-      const promptInput = document.getElementById('prompt').value || "An epic adventure begins";
+      const promptInput = document.getElementById('prompt').value || "An adventure begins";
 
-      // Create a dynamic prompt for the AI
+      // 2. Build a dynamic story prompt
       const promptText = `Write a long, ${genre} story about ${character}. ${promptInput}`;
 
-      // Generate story offline
+      // 3. Generate story offline
       const story = await model.generate(promptText, {
-        max_tokens: 2500,   // adjust for very long stories
+        max_tokens: 2500, // controls story length
         temperature: 0.7
       });
 
